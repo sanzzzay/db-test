@@ -9,9 +9,9 @@ class RedisManager():
         #r = redis.Redis(host='localhost',  port=6379, db=0)
         return r
     @staticmethod
-    def add_data(data):
+    def add_data(key, data):
         r = RedisManager.get_client()
-        r.set(data)
+        r.set(key, data)
         return "Data added"
         
 
