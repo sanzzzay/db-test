@@ -11,7 +11,7 @@ class RedisManager():
     @staticmethod
     def add_data(data):
         r = RedisManager.get_client()
-        r.add(data)
+        r.set(data)
         return "Data added"
         
 
