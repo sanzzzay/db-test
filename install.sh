@@ -11,3 +11,10 @@ sudo yum install git -y
 
 # install pip
 sudo yum -y install python-pip
+
+# start virtual env
+# python3 -m venv db-test-venv
+# source db-test-venv/bin/activate
+# git clone project-name
+# cd project-name/
+# pip install -r requirements.txt 
