@@ -12,6 +12,7 @@ class Player:
                 position = int(input(f"{self.name}, enter your move (1-9): ")) - 1
                 if 0 <= position <= 8 and board.cells[position] == " ":
                     r.publish('tic-tac-toe', position)
+                    return position
                 else:
                     print("Invalid move. Try again.")
             except ValueError:
