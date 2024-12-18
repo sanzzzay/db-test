@@ -1,7 +1,7 @@
 # Pull MongoDB image:
 sudo docker pull mongo
 # Run MongoDB container:
-sudo docker run --name mongodb -d -p 27017:27017 mongo
+# sudo docker run --name mongodb -d -p 27017:27017 mongo
 # Check running containers:
 sudo docker ps
 
@@ -26,8 +26,12 @@ docker compose version
 #docker compose -f compose1.yml exec cfgsvr1 mongosh --eval 'rs.initiate({_id:"cfgrs", configsvr:true, members:[{_id:0, host:"cfgsvr1:27017"}]})'
 #Initialize shard replica set:
 #docker compose -f compose1.yml exec shard1svr1 mongosh --eval 'rs.initiate({_id:"shard1rs", members:[{_id:0, host:"shard1svr1:27017"}]})'
+#docker compose -f compose1.yml exec shard2svr1 mongosh --eval 'rs.initiate({_id:"shard2rs", members:[{_id:0, host:"shard2svr1:27017"}]})'
+#docker compose -f compose1.yml exec shard3svr1 mongosh --eval 'rs.initiate({_id:"shard3rs", members:[{_id:0, host:"shard3svr1:27017"}]})'
 # add the shard
 #docker compose -f compose1.yml exec mongos mongosh --eval 'sh.addShard("shard1rs/shard1svr1:27017")'
+#docker compose -f compose1.yml exec mongos mongosh --eval 'sh.addShard("shard2rs/shard2svr1:27017")'
+#docker compose -f compose1.yml exec mongos mongosh --eval 'sh.addShard("shard3rs/shard3svr1:27017")'
 
 # Check shard status
 # docker compose -f compose1.yml exec shard1svr1 mongosh --eval 'rs.status()'
@@ -36,4 +40,3 @@ docker compose version
 
 # Then verify the sharding status:
 #docker compose -f compose1.yml exec mongos mongosh --eval 'sh.status()'
-
