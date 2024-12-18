@@ -1,62 +1,11 @@
+version: '3'
+# create 1 router 2 config server and 3 shards and each shard having 1 replica set with 1 node
 services:
-  cfgsvr1:
-    container_name: cfgsvr1
-    image: mongo:latest
-    command: mongod --configsvr --replSet cfgrs --port 27017 --bind_ip_all
-    volumes:
-      - cfgsvr1:/data/db
-    networks:
-      - mongocluster
-
-  cfgsvr2:
-    container_name: cfgsvr2
-    image: mongo:latest
-    command: mongod --configsvr --replSet cfgrs --port 27017 --bind_ip_all
-    volumes:
-      - cfgsvr2:/data/db
-    networks:
-      - mongocluster
-
-  cfgsvr3:
-    container_name: cfgsvr3
-    image: mongo:latest
-    command: mongod --configsvr --replSet cfgrs --port 27017 --bind_ip_all
-    volumes:
-      - cfgsvr3:/data/db
-    networks:
-      - mongocluster
-
-  shard1svr1:
-    container_name: shard1svr1
-    image: mongo:latest
-    command: mongod --shardsvr --replSet shard1rs --port 27017 --bind_ip_all
-    volumes:
-      - shard1svr1:/data/db
-    networks:
-      - mongocluster
-
-  shard1svr2:
-    container_name: shard1svr2
-    image: mongo:latest
-    command: mongod --shardsvr --replSet shard1rs --port 27017 --bind_ip_all
-    volumes:
-      - shard1svr2:/data/db
-    networks:
-      - mongocluster
-
-  shard1svr3:
-    container_name: shard1svr3
-    image: mongo:latest
-    command: mongod --shardsvr --replSet shard1rs --port 27017 --bind_ip_all
-    volumes:
-      - shard1svr3:/data/db
-    networks:
-      - mongocluster
-
+  # Router (mongos)
   mongos:
     container_name: mongos
     image: mongo:latest
-    command: mongos --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017,cfgsvr3:27017 --bind_ip_all --port 27017
+    command: mongos --configdb cfgrs/cfgsvr1:27017,cfgsvr2:27017 --bind_ip_all --port 27017
     ports:
       - "27017:27017"
     networks:
@@ -64,20 +13,76 @@ services:
     depends_on:
       - cfgsvr1
       - cfgsvr2
-      - cfgsvr3
       - shard1svr1
-      - shard1svr2
-      - shard1svr3
+      - shard2svr1
+      - shard3svr1
+
+  # Config Servers (2 nodes)
+  cfgsvr1:
+    container_name: cfgsvr1
+    image: mongo:latest
+    command: mongod --configsvr --replSet cfgrs --port 27017 --bind_ip_all
+    ports:
+      - "27018:27017"
+    networks:
+      - mongocluster
+    volumes:
+      - cfgsvr1:/data/db
+
+  cfgsvr2:
+    container_name: cfgsvr2
+    image: mongo:latest
+    command: mongod --configsvr --replSet cfgrs --port 27017 --bind_ip_all
+    ports:
+      - "27019:27017"
+    networks:
+      - mongocluster
+    volumes:
+      - cfgsvr2:/data/db
+
+  # Shard 1 (1 node in replica set)
+  shard1svr1:
+    container_name: shard1svr1
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --bind_ip_all
+    ports:
+      - "27020:27017"
+    networks:
+      - mongocluster
+    volumes:
+      - shard1svr1:/data/db
+
+  # Shard 2 (1 node in replica set)
+  shard2svr1:
+    container_name: shard2svr1
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --bind_ip_all
+    ports:
+      - "27021:27017"
+    networks:
+      - mongocluster
+    volumes:
+      - shard2svr1:/data/db
+
+  # Shard 3 (1 node in replica set)
+  shard3svr1:
+    container_name: shard3svr1
+    image: mongo:latest
+    command: mongod --shardsvr --replSet shard3rs --port 27017 --bind_ip_all
+    ports:
+      - "27022:27017"
+    networks:
+      - mongocluster
+    volumes:
+      - shard3svr1:/data/db
+
+networks:
+  mongocluster:
+    driver: bridge
 
 volumes:
   cfgsvr1:
   cfgsvr2:
-  cfgsvr3:
   shard1svr1:
-  shard1svr2:
-  shard1svr3:
-
-networks:
-  mongocluster:
-    name: mongocluster
-    driver: bridge
+  shard2svr1:
+  shard3svr1:
