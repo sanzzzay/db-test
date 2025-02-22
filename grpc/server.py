@@ -8,7 +8,7 @@ class ShowCollectionService(showcollection_pb2_grpc.ShowCollectionServiceService
     def SendShowCollection(self, request, context):
         
         print(f"Got the showslug {request.showslug}")
-        return showcollection_pb2.ShowCollectionResponse(showid = 1,success = 2)
+        return showcollection_pb2.ShowCollectionResponse(showid="1",success=True)
 
 def serve():
     # Create a gRPC server
