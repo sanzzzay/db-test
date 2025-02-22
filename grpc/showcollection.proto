@@ -1,20 +1,19 @@
-#showcollection.proto
 syntax = "proto3";
 
 package showcollectionservice;
 
 // define the service
 service ShowCollectionService {
- rpc SendShowCollection (ShowCollectionRequest) return (ShowCollectionResponse) {}
+ rpc SendShowCollection (ShowCollectionRequest) returns (ShowCollectionResponse) {}
 }
 
 // request showcollection
-showcollection ShowCollectionRequest {
+message ShowCollectionRequest {
     string showslug = 1;
 }
 
 //response showcollection
-showcollection ShowCollectionResponse{
+message ShowCollectionResponse{
     string showid = 1;
     bool success = 2;
 }
